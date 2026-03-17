@@ -14,7 +14,7 @@ class SignalRequest(BaseModel):
 
 
 @router.post("/signal")
-def send_signal(request: SignalRequest):
+async def send_signal(request: SignalRequest):
     # 1. Parse signal
     signal_type = signal_parser.parse(request.text)
 
@@ -22,7 +22,7 @@ def send_signal(request: SignalRequest):
     redis_store.push_signal(signal_type, request.user_id)
 
     # 3. Try matching
-    match = matching_engine.try_match(signal_type)
+    match = await matching_engine.try_match(signal_type)
 
     return {
         "message": "signal received",

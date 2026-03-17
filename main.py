@@ -4,12 +4,16 @@ from core.config import settings
 from storage.redis_store import redis_store
 from storage.postgres_store import postgres_store
 
-from api.signal_routes import router as signal_router
+from api.signal_routes import router as signal_route
+
+from realtime.websocket_routes import router as ws_router
 
 
 app = FastAPI()
 
-app.include_router(signal_router)
+# Register routes
+app.include_router(signal_route)
+app.include_router(ws_router)
 
 @app.get("/")
 def root():
