@@ -5,3 +5,5 @@ venv/
 .venv/
 .idea/
 .vscode/
+id_ed25519.pub
+id_ed25519.pub.pub
