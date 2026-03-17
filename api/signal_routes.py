@@ -4,6 +4,8 @@ from pydantic import BaseModel
 from services.signal_parser import signal_parser
 from storage.redis_store import redis_store
 
+from services.matching_engine import matching_engine
+
 router = APIRouter()
 
 class SignalRequest(BaseModel):
@@ -19,9 +21,12 @@ def send_signal(request: SignalRequest):
     #2.  Push to Redis
     redis_store.push_signal(signal_type, request.user_id)
 
-    # 3. Return response
+    # 3. Try matching
+    match = matching_engine.try_match(signal_type)
+
     return {
         "message": "signal received",
-        "signal_type": signal_type
+        "signal_type": signal_type,
+        "match": match
     }
 
